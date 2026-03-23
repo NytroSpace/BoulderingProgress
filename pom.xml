@@ -18,8 +18,10 @@
 
   <developers>
     <developer>
-      <name>Your Name</name>
-      <email>your.email@example.com</email>
+      <name>Nico Rannikkoluoto</name>
+    </developer>
+    <developer>
+      <name>Lassi Palola</name>
     </developer>
   </developers>
 
@@ -47,6 +49,11 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>25</version>
+    </dependency>
+    <dependency>
+      <groupId>tools.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>3.0.4</version>
     </dependency>
   </dependencies>
 
