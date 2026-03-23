@@ -1,4 +1,5 @@
 package fi.jyu.ohj2.nico.BoulderProgress.model;
 
-public class Archive {
-}
+import java.util.ArrayList;
+
+public record Archive(ArrayList<MonthlyDataset> sessions) {}
