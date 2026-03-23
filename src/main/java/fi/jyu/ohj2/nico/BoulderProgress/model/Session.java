@@ -1,4 +1,7 @@
 package fi.jyu.ohj2.nico.BoulderProgress.model;
 
-public record Session() {
+import java.util.ArrayList;
+
+public record Session(ArrayList<Route> routes, String date, String UUID) {
+
 }
