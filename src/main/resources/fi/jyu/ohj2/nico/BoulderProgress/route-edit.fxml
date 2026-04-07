@@ -18,7 +18,9 @@
    <children>
       <Button fx:id="AddRoute" layoutX="239.0" layoutY="326.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="80.0" text="Add" textAlignment="CENTER" />
       <Button fx:id="Cancel" layoutX="340.0" layoutY="326.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="80.0" text="Cancel" textAlignment="CENTER" />
+
       <ComboBox fx:id="WallTypeBox" layoutX="77.0" layoutY="249.0" prefHeight="34.0" prefWidth="99.0" promptText="Wall type" />
+
       <VBox layoutX="77.0" layoutY="30.0" prefHeight="200.0" prefWidth="158.0">
          <children>
             <GridPane gridLinesVisible="true" prefHeight="200.0" prefWidth="163.0">
