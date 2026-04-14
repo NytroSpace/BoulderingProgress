@@ -5,6 +5,10 @@ package fi.jyu.ohj2.nico.BoulderProgress.model;
 /// </summary>
 public record Route(String grade, WallType wallType, int attempts, boolean isCompleted, String UUID) {
 
+    @Override
+    public String toString() {
+        return grade + "|" + wallType + "|" + attempts + isCompleted;
+    }
 }
 
 
