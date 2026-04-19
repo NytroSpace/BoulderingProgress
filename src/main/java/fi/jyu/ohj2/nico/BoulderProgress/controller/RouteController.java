@@ -7,11 +7,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class RouteController implements Initializable {
 
@@ -28,6 +30,9 @@ public class RouteController implements Initializable {
     private Button Cancel;
 
     @FXML
+    private CheckBox IsCompleted;
+
+    @FXML
     private TextField TextGrade;
 
     @FXML
@@ -35,7 +40,7 @@ public class RouteController implements Initializable {
 
     private ObservableList<Route> routes;
 
-    // Lisätty: Session-kontrolleri kutsuu tätä ennen ikkunan avaamista
+    // Session controller calls this before opening the window.
     public void setRoutes(ObservableList<Route> routes) {
         this.routes = routes;
     }
@@ -46,7 +51,8 @@ public class RouteController implements Initializable {
         TextAttempts.setStyle("");
 
         String grade = TextGrade.getText();
-        String attempts = TextAttempts.getText();
+        // in 2 parts, first fetched as text then converts to int
+        int attempts = Integer.parseInt(TextAttempts.getText());
 
         if (grade.isBlank()) {
             // Highlight as red if grade is blank
@@ -54,7 +60,8 @@ public class RouteController implements Initializable {
             return false;
         }
 
-        if (attempts.isBlank()) {
+        // Highlights the field in red color if attempts are empty or less than 1
+        if (attempts < 1) {
             // Highlight as red if attempts is blank
             TextAttempts.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
             return false;
@@ -76,10 +83,17 @@ public class RouteController implements Initializable {
             return;
         }
 
+        String grade = TextGrade.getText();
+        int attempts = Integer.parseInt(TextAttempts.getText());
+        WallType wall = WallTypeBox.getValue();
+        boolean completed = IsCompleted.isSelected();
+
         Route route = new Route(
-                TextGrade.getText(),
-                TextAttempts.getText(),
-                WallTypeBox.getValue()
+                grade,
+                attempts,
+                wall,
+                completed,
+                UUID.randomUUID()
         );
 
         routes.add(route);

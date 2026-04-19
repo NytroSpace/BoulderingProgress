@@ -10,7 +10,7 @@ public record Session(ArrayList<Route> routes, String date, String UUID) {
     /// Number of completed routes as a long type.
     /// </return>
     public long getCompletedCount() {
-        return routes.stream().filter(Route::isCompleted).count();
+        return routes.stream().filter(Route::completed).count();
     }
 
 

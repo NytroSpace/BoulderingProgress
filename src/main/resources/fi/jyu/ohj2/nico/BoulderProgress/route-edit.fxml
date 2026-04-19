@@ -70,7 +70,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <CheckBox fx:id="CheckBox1" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0" GridPane.columnIndex="1" />
+            <CheckBox fx:id="IsCompleted" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

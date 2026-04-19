@@ -16,7 +16,7 @@ public class SessionController implements Initializable {
      * Route list. If a route gets added via route window, it's saved to this list.
      */
     @FXML
-    private ListView<String> routeList;
+    private ListView<Route> routeList;
 
     /*
      * Route list. If a route gets added via route window, it's saved to this list.
@@ -27,7 +27,7 @@ public class SessionController implements Initializable {
      * Getter for routes from the route window.
      * @return routes from the route window
      */
-    public ObservableList<String> getRoutes()
+    public ObservableList<Route> getRoutes()
     {
         return routes;
     }
