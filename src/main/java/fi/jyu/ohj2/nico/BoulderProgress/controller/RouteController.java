@@ -60,12 +60,41 @@ public class RouteController implements Initializable {
             return false;
         }
 
+        if (grade.length() > 3) {
+            TextGrade.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
+            return false;
+        }
+
+        if (!gradeCheck(String.valueOf(TextGrade))) {
+            TextGrade.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
+            return false;
+        }
+
         // Highlights the field in red color if attempts are empty or less than 1
         if (attempts < 1) {
             // Highlight as red if attempts is blank
             TextAttempts.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
             return false;
         }
+
+        return true;
+    }
+
+    public boolean gradeCheck(String grade) {
+
+        char n = grade.charAt(0);
+        char l = grade.charAt(1);
+
+        if (n >= '4' && n <= '9') {
+            return false;
+        }
+        if (l != 'a' && l != 'b' && l != 'c') {
+            return false;
+        }
+        if (grade.length() == 3 && grade.charAt(2) != '+') {
+            return false;
+        }
+
         return true;
     }
 
