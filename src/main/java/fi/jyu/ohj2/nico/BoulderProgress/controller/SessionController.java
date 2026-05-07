@@ -21,7 +21,7 @@ public class SessionController implements Initializable {
     /*
      * Route list. If a route gets added via route window, it's saved to this list.
      */
-    private ObservableList<Route> routes = FXCollections.observableArrayList();
+    private final ObservableList<Route> routes = FXCollections.observableArrayList();
 
     /**
      * Getter for routes from the route window.
