@@ -2,6 +2,7 @@ package fi.jyu.ohj2.nico.BoulderProgress.controller;
 
 import fi.jyu.ohj2.nico.BoulderProgress.App;
 import fi.jyu.ohj2.nico.BoulderProgress.model.Session;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.swing.table.TableColumn;
+import java.awt.desktop.QuitEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,6 +38,8 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AddButton.setOnAction(e -> openSessionWindow("Add Session"));
+        ModifyButton.setOnAction(e -> openSessionWindow("Modify Session"));
+        ExitButton.setOnAction(e -> closeApplication());
     }
 
     private void openSessionWindow(String windowTitle) {
@@ -54,5 +58,10 @@ public class MainController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void closeApplication() {
+        Platform.exit();
+        System.exit(0);
     }
 }
