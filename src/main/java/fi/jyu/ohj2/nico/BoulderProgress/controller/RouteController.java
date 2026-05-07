@@ -54,18 +54,7 @@ public class RouteController implements Initializable {
         // in 2 parts, first fetched as text then converts to int
         int attempts = Integer.parseInt(TextAttempts.getText());
 
-        if (grade.isBlank()) {
-            // Highlight as red if grade is blank
-            TextGrade.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
-            return false;
-        }
-
-        if (grade.length() > 3) {
-            TextGrade.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
-            return false;
-        }
-
-        if (!gradeCheck(String.valueOf(TextGrade))) {
+        if (!gradeCheck(grade)) {
             TextGrade.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
             return false;
         }
@@ -82,34 +71,38 @@ public class RouteController implements Initializable {
 
     public boolean gradeCheck(String grade) {
 
+        if (grade.isEmpty() || grade.length() > 3) return false;
+
         char n = grade.charAt(0);
-        char l = grade.charAt(1);
 
-        if (n >= '4' && n <= '9') {
-            return false;
-        }
-        if (l != 'a' && l != 'b' && l != 'c') {
-            return false;
-        }
-        if (grade.length() == 3 && grade.charAt(2) != '+') {
+        if (n < '3' || n > '9') return false;
+
+        if (n <= '5') {
+            if (grade.length() == 1) return true;
+            if (grade.length() == 2 && grade.charAt(1) == '+') return true;
             return false;
         }
 
-        return true;
+        if (n <= '9') {
+            if (grade.length() < 2) return false;
+
+            char l = grade.charAt(1);
+
+            if (l != 'a' && l != 'b' && l != 'c') return false;
+
+            if (grade.length() == 2) return true;
+            if (grade.charAt(2) == '+') return true;
+        }
+
+        return false;
+
     }
 
-    /*
-     * If cancel is pressed, closes the route window.
-     */
-    @FXML
-    private void onCancel() {
-        Cancel.getScene().getWindow().hide();
-    }
 
     @FXML
     private void onAdd() {
         if(!validateRoute()) {
-            return;
+          return;
         }
 
         String grade = TextGrade.getText();
@@ -140,6 +133,16 @@ public class RouteController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         WallTypeBox.setItems(FXCollections.observableArrayList(WallType.values()));
+        Cancel.setOnAction(e -> onCancel());
+        AddRoute.setOnAction(e -> onAdd());
 
+    }
+
+    /*
+     * If cancel is pressed, closes the route window.
+     */
+    @FXML
+    private void onCancel() {
+        Cancel.getScene().getWindow().hide();
     }
 }

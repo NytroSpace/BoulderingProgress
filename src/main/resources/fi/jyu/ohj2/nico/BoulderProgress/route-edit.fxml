@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:controller="fi.jyu.ohj2.nico.BoulderProgress.controller.RouteController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="AddRoute" layoutX="239.0" layoutY="326.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="80.0" text="Add" textAlignment="CENTER" />
       <Button fx:id="Cancel" layoutX="340.0" layoutY="326.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="80.0" text="Cancel" textAlignment="CENTER" />

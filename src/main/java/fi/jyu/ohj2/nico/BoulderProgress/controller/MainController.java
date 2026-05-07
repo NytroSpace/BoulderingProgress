@@ -46,6 +46,8 @@ public class MainController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("session-edit.fxml"));
             Parent root = loader.load();
+
+            SessionController controller = loader.getController();
             Scene scene = new Scene(root);
 
             Stage stage = new Stage();
