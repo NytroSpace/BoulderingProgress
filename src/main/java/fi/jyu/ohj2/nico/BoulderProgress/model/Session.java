@@ -2,7 +2,17 @@ package fi.jyu.ohj2.nico.BoulderProgress.model;
 
 import java.util.ArrayList;
 
-public record Session(ArrayList<Route> routes, String date, String UUID) {
+public class Session {
+    private final ArrayList<Route> routes;
+    private final String date;
+    private final String uuid;
+
+    public Session(ArrayList<Route> routes, String date, String uuid) {
+        this.routes = routes;
+        this.date = date;
+        this.uuid = uuid;
+    }
+
     /// <summary>
     /// Returns the number of completed routes.
     /// </summary>

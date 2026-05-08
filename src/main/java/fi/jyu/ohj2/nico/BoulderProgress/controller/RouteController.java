@@ -87,6 +87,7 @@ public class RouteController implements Initializable {
             if (grade.length() < 2) return false;
 
             char l = grade.charAt(1);
+            l = Character.toLowerCase(l);
 
             if (l != 'a' && l != 'b' && l != 'c') return false;
 
