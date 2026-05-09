@@ -48,6 +48,7 @@
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -58,6 +59,7 @@
                                 <Label text="Latest Session" textFill="#888888" GridPane.columnIndex="1" />
                                 <Label text="Hardest Grade" textFill="#888888" GridPane.columnIndex="2" />
                                 <Label text="Times Climbed" textFill="#888888" GridPane.columnIndex="3" />
+                                <Label text="Total Completed Climbs" textFill="#888888" GridPane.columnIndex="4" />
 
                                 <Label fx:id="lblTotalClimbs" text="0" GridPane.rowIndex="1">
                                     <font><Font name="System Bold" size="14.0" /></font>
@@ -69,6 +71,9 @@
                                     <font><Font name="System Bold" size="14.0" /></font>
                                 </Label>
                                 <Label fx:id="lblTimesClimbed" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <font><Font name="System Bold" size="14.0" /></font>
+                                </Label>
+                                <Label fx:id="lblTotalCompleted" text="0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                                     <font><Font name="System Bold" size="14.0" /></font>
                                 </Label>
                             </children>

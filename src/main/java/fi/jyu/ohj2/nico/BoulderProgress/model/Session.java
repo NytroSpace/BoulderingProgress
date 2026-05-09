@@ -1,5 +1,7 @@
 package fi.jyu.ohj2.nico.BoulderProgress.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 
 public class Session {
@@ -7,7 +9,7 @@ public class Session {
     private final String date;
     private final String uuid;
 
-    public Session(ArrayList<Route> routes, String date, String uuid) {
+    public Session(@JsonProperty("routes") ArrayList<Route> routes, @JsonProperty("date") String date, @JsonProperty("uuid") String uuid) {
         this.routes = routes;
         this.date = date;
         this.uuid = uuid;
