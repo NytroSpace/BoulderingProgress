@@ -20,11 +20,11 @@
                 <Insets top="10.0" />
             </VBox.margin>
             <children>
-                <TableView fx:id="SessionTable" pickOnBounds="false" prefHeight="200.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="routesTable" pickOnBounds="false" prefHeight="200.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="GradeColumn" prefWidth="75.0" text="Grade" />
-                        <TableColumn fx:id="WallTypeColumn" prefWidth="75.0" text="Wall Type" />
-                        <TableColumn fx:id="AttemptsColumn" prefWidth="75.0" text="Attempts" />
+                        <TableColumn fx:id="gradeColumn" prefWidth="75.0" text="Grade" />
+                        <TableColumn fx:id="wallTypeColumn" prefWidth="75.0" text="Wall Type" />
+                        <TableColumn fx:id="attemptsColumn" prefWidth="75.0" text="Attempts" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -53,16 +53,16 @@
                                 <Label text="Total Attempts" textFill="#888888" GridPane.columnIndex="2" />
                                 <Label text="Total Completed" textFill="#888888" GridPane.columnIndex="3" />
 
-                                <Label fx:id="ModeGrade" text="--" GridPane.rowIndex="1">
+                                <Label fx:id="modeGrade" text="--" GridPane.rowIndex="1">
                                     <font><Font name="System Bold" size="14.0" /></font>
                                 </Label>
-                                <Label fx:id="ModeWallType" text="--" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label fx:id="modeWallType" text="--" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <font><Font name="System Bold" size="14.0" /></font>
                                 </Label>
-                                <Label fx:id="TotalAttempts" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Label fx:id="totalAttempts" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                     <font><Font name="System Bold" size="14.0" /></font>
                                 </Label>
-                                <Label fx:id="TotalCompleted" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                <Label fx:id="totalCompleted" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                     <font><Font name="System Bold" size="14.0" /></font>
                                 </Label>
                             </children>

@@ -41,12 +41,16 @@ public class RouteController implements Initializable {
     private ObservableList<Route> routes;
 
     // Session controller calls this before opening the window.
-    public void setRoutes(ObservableList<Route> routes) {
-        this.routes = routes;
-    }
+    // Currently not needed. When a new route is added, the window closes. After that the session controller stops waiting and checks if we saved. If so, it uses a getter to get the new route.
+    //public void setRoutes(ObservableList<Route> routes) {
+    //    this.routes = routes;
+    //}
+
+    private Route createdRoute;
+    private boolean confirmedSave = false;
+
 
     private boolean validateRoute() {
-
         TextGrade.setStyle("");
         TextAttempts.setStyle("");
 
@@ -111,15 +115,20 @@ public class RouteController implements Initializable {
         WallType wall = WallTypeBox.getValue();
         boolean completed = IsCompleted.isSelected();
 
-        Route route = new Route(
-                grade,
-                attempts,
-                wall,
-                completed,
-                UUID.randomUUID()
-        );
+        //Route route = new Route(
+        //        grade,
+        //        attempts,
+        //        wall,
+        //        completed,
+        //        UUID.randomUUID()
+        //);
 
-        routes.add(route);
+        //routes.add(route);
+
+        this.createdRoute = new Route(grade, attempts, wall, completed, UUID.randomUUID());
+        confirmedSave = true;
+
+        onCancel();
 
         TextGrade.clear();
         TextAttempts.clear();
@@ -146,4 +155,7 @@ public class RouteController implements Initializable {
     private void onCancel() {
         Cancel.getScene().getWindow().hide();
     }
+
+    public Route getRoute() {return createdRoute;}
+    public boolean isSaveConfirmed() {return confirmedSave;}
 }

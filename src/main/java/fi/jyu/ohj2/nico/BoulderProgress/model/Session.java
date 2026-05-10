@@ -1,19 +1,27 @@
 package fi.jyu.ohj2.nico.BoulderProgress.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 
 public class Session {
-    private final ArrayList<Route> routes;
-    private final String date;
     private final String uuid;
+    private final String date;
 
-    public Session(@JsonProperty("routes") ArrayList<Route> routes, @JsonProperty("date") String date, @JsonProperty("uuid") String uuid) {
-        this.routes = routes;
-        this.date = date;
+    @JsonProperty("routes")
+    private final ObservableList<Route> routes = FXCollections.observableArrayList();
+
+    public Session(
+            @JsonProperty("uuid") String uuid,
+            @JsonProperty("date") String date
+    ) {
         this.uuid = uuid;
+        this.date = date;
     }
+
+    public ObservableList<Route> getRoutes() {return routes;}
 
     /// <summary>
     /// Returns the number of completed routes.

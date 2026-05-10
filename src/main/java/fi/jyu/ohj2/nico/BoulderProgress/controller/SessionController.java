@@ -2,7 +2,11 @@ package fi.jyu.ohj2.nico.BoulderProgress.controller;
 
 import fi.jyu.ohj2.nico.BoulderProgress.App;
 import fi.jyu.ohj2.nico.BoulderProgress.model.Route;
+import fi.jyu.ohj2.nico.BoulderProgress.model.Session;
+import fi.jyu.ohj2.nico.BoulderProgress.model.WallType;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,11 +16,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class SessionController implements Initializable {
@@ -33,26 +42,50 @@ public class SessionController implements Initializable {
     @FXML
     private Button CancelButton2;
 
+    @FXML
+    private TableView<Route> routesTable;
+
+    @FXML private TableColumn<Route, String> gradeColumn;
+    @FXML private TableColumn<Route, String> wallTypeColumn;
+    @FXML private TableColumn<Route, Integer> attemptsColumn;
+
     /*
      * Route list. If a route gets added via route window, it's saved to this list.
      */
     private final ObservableList<Route> routes = FXCollections.observableArrayList();
+    private Session session;
+    private boolean confirmedSave = false;
 
     /**
      * Getter for routes from the route window.
      * @return routes from the route window
      */
-    public ObservableList<Route> getRoutes()
-    {
-        return routes;
-    }
+    //public ObservableList<Route> getRoutes()
+    //{
+    //    return routes;
+    //}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        gradeColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().grade())
+        );
+
+        wallTypeColumn.setCellValueFactory(cellData -> {
+            WallType type = cellData.getValue().wallType();
+
+            return new SimpleStringProperty(type != null ? type.toString() : "");
+        });
+
+        attemptsColumn.setCellValueFactory(cellData ->
+                new SimpleObjectProperty<>(cellData.getValue().attempts())
+        );
 
         AddButton2.setOnAction(e -> openRouteWindow("Add Route"));
         CancelButton2.setOnAction(e -> onCancel2());
+        SaveButton.setOnAction(e -> onSave());
     }
+
 
     private void openRouteWindow(String windowTitle) {
         try {
@@ -72,14 +105,43 @@ public class SessionController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
 
             stage.showAndWait();
+
+            /*
+            After the route window is closed, we can check if something was saved. If so, we use the getter to get it.
+            Then we add that route to an Observable list within the current session.
+             */
+            if (controller.isSaveConfirmed()) {
+                Route newRoute = controller.getRoute();
+
+                routes.add(newRoute);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+
+    public void setSession(Session session) {
+        this.session = session;
+
+        routes.setAll(session.getRoutes());
+
+        routesTable.setItems(routes);
+    }
+
 
     @FXML
     private void onCancel2() {
         CancelButton2.getScene().getWindow().hide();
     }
 
+    @FXML
+    private void onSave() {
+        this.session.getRoutes().addAll(routes);
+        confirmedSave = true;
+        onCancel2();
+    }
+
+    public boolean isConfirmedSave() {return confirmedSave;}
+    public Session getSession() {return this.session;}
 }
