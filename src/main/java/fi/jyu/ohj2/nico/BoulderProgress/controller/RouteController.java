@@ -110,7 +110,7 @@ public class RouteController implements Initializable {
           return;
         }
 
-        String grade = TextGrade.getText();
+        String grade = TextGrade.getText().toUpperCase(); // Accepts the grade as any case, but always turn it into uppercase after.
         int attempts = Integer.parseInt(TextAttempts.getText());
         WallType wall = WallTypeBox.getValue();
         boolean completed = IsCompleted.isSelected();
@@ -130,8 +130,12 @@ public class RouteController implements Initializable {
 
         onCancel();
 
-        TextGrade.clear();
-        TextAttempts.clear();
+        /*
+        Mä oletan, että sun alkuperänen idea oli että sä voit lisätä monta peräkkäin ilman että se ikkuna sulkeutuu?
+        Mun mielestä, varsinkin koska meillä on vaan "Add" ja "Cancel" nappi, se käy enemmän järkeen vaan sulkea se ikkuna lisäyksen jälkeen.
+         */
+        //TextGrade.clear();
+        //TextAttempts.clear();
     }
 
     /**

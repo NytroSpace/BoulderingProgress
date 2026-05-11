@@ -14,10 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -84,6 +81,21 @@ public class SessionController implements Initializable {
         AddButton2.setOnAction(e -> openRouteWindow("Add Route"));
         CancelButton2.setOnAction(e -> onCancel2());
         SaveButton.setOnAction(e -> onSave());
+
+        // Used for updating the styles of the rows by adding a row controller
+        routesTable.setRowFactory(tv -> new TableRow<Route>() {
+            @Override
+            protected void updateItem(Route item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setStyle("");
+                } else if (item.completed()) {
+                    setStyle("-fx-background-color: #c8e6c9;"); // Make the row light green if it's completed
+                } else {
+                    setStyle("");                 }
+            }
+        });
     }
 
 
@@ -114,6 +126,10 @@ public class SessionController implements Initializable {
                 Route newRoute = controller.getRoute();
 
                 routes.add(newRoute);
+
+                if (newRoute.completed()) {
+
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
