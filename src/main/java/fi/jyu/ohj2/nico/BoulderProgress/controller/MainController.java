@@ -1,74 +1,204 @@
 package fi.jyu.ohj2.nico.BoulderProgress.controller;
 
 import fi.jyu.ohj2.nico.BoulderProgress.App;
+import fi.jyu.ohj2.nico.BoulderProgress.model.JsonDataService;
 import fi.jyu.ohj2.nico.BoulderProgress.model.MonthlyDataset;
 import fi.jyu.ohj2.nico.BoulderProgress.model.Session;
+import fi.jyu.ohj2.nico.BoulderProgress.model.Route;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.table.TableColumn;
-import java.awt.desktop.QuitEvent;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.Comparator;
 
 public class MainController implements Initializable {
     @FXML
     private Button AddButton;
-
     @FXML
     private Button ModifyButton;
-
     @FXML
     private Button RemoveButton;
-
     @FXML
     private Button ExitButton;
-
     @FXML
     private TableView<Session> MonthlyTable;
 
-    private MonthlyDataset monthlyDataset = new MonthlyDataset(
-            FXCollections.observableArrayList(),
-            2026,
-            1
-    );
+    @FXML
+    private TableColumn<Session, Number> colNro;
+    @FXML
+    private TableColumn<Session, String> colDate;
+    @FXML
+    private TableColumn<Session, String> colHardest;
+    @FXML
+    private TableColumn<Session, String> colMode;
+    @FXML
+    private TableColumn<Session, Number> colTotal;
+
+    @FXML
+    private Label lblTotalClimbs;
+    @FXML
+    private Label lblLatestSession;
+    @FXML
+    private Label lblHardestGrade;
+    @FXML
+    private Label lblTimesClimbed;
+    @FXML
+    private Label lblTotalCompleted;
+
+    private MonthlyDataset monthlyDataset;
+    JsonDataService jsonDataService = new JsonDataService();
+    private static final Path SAVE_FILE_CURRENT = Path.of("data/climbs/current/climbs.json");
+    private static final Path SAVE_FILE_ARCHIVE = Path.of("data/climbs/archived");
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AddButton.setOnAction(e -> openSessionWindow("Add Session"));
         ModifyButton.setOnAction(e -> openSessionWindow("Modify Session"));
         ExitButton.setOnAction(e -> closeApplication());
+
+        colNro.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(MonthlyTable.getItems().indexOf(p.getValue()) + 1)
+        );
+
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        colHardest.setCellValueFactory(p -> {
+            String hardest = p.getValue().getRoutes().stream()
+                    .filter(fi.jyu.ohj2.nico.BoulderProgress.model.Route::completed)
+                    .map(fi.jyu.ohj2.nico.BoulderProgress.model.Route::grade)
+                    .max(String::compareTo)
+                    .orElse("--");
+            return new ReadOnlyObjectWrapper<>(hardest);
+        });
+
+        colMode.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>("--"));
+
+        colTotal.setCellValueFactory(p ->
+                new ReadOnlyObjectWrapper<>(p.getValue().getAttemptsCount())
+        );
+
+        try {
+            monthlyDataset = jsonDataService.loadMonthlyDataset(SAVE_FILE_CURRENT);
+
+            if (monthlyDataset.getYear() != LocalDate.now().getYear() || monthlyDataset.getMonth() != LocalDate.now().getMonthValue()) {
+                System.out.println("Loaded data is old. Archiving and starting new dataset.");
+                try {
+                    archiveDataset(SAVE_FILE_ARCHIVE, monthlyDataset);
+                    createNewDataset(SAVE_FILE_CURRENT);
+                } catch (IOException e) {
+                    System.err.println("Critical error during monthly rollover: " + e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("No valid save found. Creating new dataset.");
+            try {
+                createNewDataset(SAVE_FILE_CURRENT);
+            } catch (IOException ex) {
+                monthlyDataset = new MonthlyDataset(
+                        FXCollections.observableArrayList(),
+                        LocalDate.now().getYear(),
+                        LocalDate.now().getMonthValue()
+                );
+                System.err.println("Could not write to disk. Changes will not be saved.");
+            }
+        }
+
+        MonthlyTable.setItems(monthlyDataset.getSessions());
+        updateStatistics();
+    }
+
+    /**
+     * Recalculates and updates the UI text for all monthly statistics.
+     */
+    private void updateStatistics() {
+        if (monthlyDataset == null || monthlyDataset.getSessions().isEmpty()) {
+            lblTotalClimbs.setText("0");
+            lblLatestSession.setText("--");
+            lblHardestGrade.setText("--");
+            lblTimesClimbed.setText("0");
+            lblTotalCompleted.setText("0");
+            return;
+        }
+
+        long totalClimbs = monthlyDataset.getSessions().stream()
+                .mapToLong(Session::getAttemptsCount)
+                .sum();
+        lblTotalClimbs.setText(String.valueOf(totalClimbs));
+
+        long totalCompleted = monthlyDataset.getSessions().stream()
+                .mapToLong(Session::getCompletedCount)
+                .sum();
+        lblTotalCompleted.setText(String.valueOf(totalCompleted));
+
+        int timesClimbed = monthlyDataset.getSessions().size();
+        lblTimesClimbed.setText(String.valueOf(timesClimbed));
+
+        String latestDate = monthlyDataset.getSessions().stream()
+                .map(Session::getDate)
+                .max(String::compareTo)
+                .orElse("--");
+        lblLatestSession.setText(latestDate);
+
+        String hardestGrade = monthlyDataset.getSessions().stream()
+                .flatMap(s -> s.getRoutes().stream())
+                .filter(Route::completed)
+                .map(Route::grade)
+                .max(Comparator.naturalOrder())
+                .orElse("--");
+        lblHardestGrade.setText(hardestGrade);
+    }
+
+    private void createNewDataset(Path path) throws IOException {
+        if (path.getParent() != null) {
+            Files.createDirectories(path.getParent());
+        }
+
+        LocalDate now = LocalDate.now();
+        this.monthlyDataset = new MonthlyDataset(
+                FXCollections.observableArrayList(),
+                now.getYear(),
+                now.getMonthValue()
+        );
+        jsonDataService.saveMonthlyDataset(monthlyDataset, path);
+    }
+
+    private void archiveDataset(Path archiveDir, MonthlyDataset datasetToArchive) throws IOException {
+        Files.createDirectories(archiveDir);
+        String newFileName = String.format("%s_%s.json", datasetToArchive.getYear(), datasetToArchive.getMonth());
+        Path savePath = archiveDir.resolve(newFileName);
+        jsonDataService.saveMonthlyDataset(datasetToArchive, savePath);
+        System.out.println("Successfully archived old dataset to: " + savePath);
     }
 
     private void openSessionWindow(String windowTitle) {
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("session-edit.fxml"));
-            Parent root = loader.load(); // The controller is created here
-
+            Parent root = loader.load();
             SessionController controller = loader.getController();
 
-            /*
-            If we're not modifying an existing session, we can safely assume we're making a new one.
-            In that case, we create a new session and set it as the controller's active session
-             */
             if (!windowTitle.equals("Modify Session")) {
-                controller.setSession(new Session("1", "1")); // Doesn't randomize UUID yet, nor check the date.
-            }
-            else {
+                controller.setSession(new Session("1", "1"));
+            } else {
                 Session selectedSession = MonthlyTable.getSelectionModel().getSelectedItem();
-
                 if (selectedSession != null) {
                     controller.setSession(selectedSession);
                 }
@@ -78,20 +208,29 @@ public class MainController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setTitle(windowTitle);
             stage.initModality(Modality.APPLICATION_MODAL);
-
             stage.showAndWait();
 
             if (controller.isConfirmedSave()) {
                 Session createdSession = controller.getSession();
 
-                monthlyDataset.getSessions().add(createdSession);
+                if (!windowTitle.equals("Modify Session")) {
+                    monthlyDataset.getSessions().add(createdSession);
+                } else {
+                    // Refresh table view in case an existing session was edited internally
+                    MonthlyTable.refresh();
+                }
+
+                // Recalculate stats whenever data is modified or added
+                updateStatistics();
+
+                // Save changes to disk immediately
+                jsonDataService.saveMonthlyDataset(monthlyDataset, SAVE_FILE_CURRENT);
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     private void closeApplication() {
         Platform.exit();

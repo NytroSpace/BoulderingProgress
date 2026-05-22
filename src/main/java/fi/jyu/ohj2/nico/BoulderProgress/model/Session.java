@@ -1,44 +1,45 @@
 package fi.jyu.ohj2.nico.BoulderProgress.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+import java.util.List;
 import java.util.ArrayList;
 
 public class Session {
     private final String uuid;
     private final String date;
+    private final ObservableList<Route> routes;
 
-    @JsonProperty("routes")
-    private final ObservableList<Route> routes = FXCollections.observableArrayList();
-
+    @JsonCreator
     public Session(
             @JsonProperty("uuid") String uuid,
-            @JsonProperty("date") String date
+            @JsonProperty("date") String date,
+            @JsonProperty("routes") List<Route> routesList
     ) {
         this.uuid = uuid;
         this.date = date;
+        // Turn the raw Jackson array list into an observable list
+        this.routes = FXCollections.observableArrayList(routesList != null ? routesList : new ArrayList<>());
     }
 
-    public ObservableList<Route> getRoutes() {return routes;}
+    public Session(String uuid, String date) {
+        this(uuid, date, new ArrayList<>());
+    }
 
-    /// <summary>
-    /// Returns the number of completed routes.
-    /// </summary>
-    /// <return>
-    /// Number of completed routes as a long type.
-    /// </return>
+    public String getUuid() { return uuid; }
+    public String getDate() { return date; }
+
+    @JsonProperty("routes") // Keeps serialization clean
+    public List<Route> getRoutesForJson() { return new ArrayList<>(routes); }
+
+    public ObservableList<Route> getRoutes() { return routes; }
+
     public long getCompletedCount() {
         return routes.stream().filter(Route::completed).count();
     }
 
-
-    /// <summary>
-    /// Returns the number of attempts made.
-    /// </summary>
-    /// <return>
-    /// Number of attempts as a long type.
     public long getAttemptsCount() {
         return routes.stream().mapToInt(Route::attempts).sum();
     }

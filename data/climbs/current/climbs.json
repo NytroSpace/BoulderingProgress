@@ -1,0 +1,36 @@
+{
+  "sessions" : [ {
+    "uuid" : "1",
+    "date" : "1",
+    "routes" : [ {
+      "grade" : "6A",
+      "attempts" : 1,
+      "wall-type" : "Overhang",
+      "completed" : true,
+      "uuid" : "e9fc7c62-d2a6-439c-b67c-7d1a5e0840be"
+    } ],
+    "attemptsCount" : 1,
+    "completedCount" : 1
+  }, {
+    "uuid" : "1",
+    "date" : "1",
+    "routes" : [ {
+      "grade" : "6B",
+      "attempts" : 6,
+      "wall-type" : "Slab/Vertical",
+      "completed" : false,
+      "uuid" : "64eb46d4-e0db-45ff-b642-adc8aa4aca93"
+    }, {
+      "grade" : "5+",
+      "attempts" : 1,
+      "wall-type" : "Slab/Vertical",
+      "completed" : true,
+      "uuid" : "d6a6a4da-a8df-4bf6-964a-5856adc38df1"
+    } ],
+    "attemptsCount" : 7,
+    "completedCount" : 1
+  } ],
+  "year" : 2026,
+  "month" : 5,
+  "schema-version" : 1
+}
