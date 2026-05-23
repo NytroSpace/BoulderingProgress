@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.Comparator;
+import java.util.UUID;
 
 public class MainController implements Initializable {
     @FXML
@@ -73,6 +74,8 @@ public class MainController implements Initializable {
         AddButton.setOnAction(e -> openSessionWindow("Add Session"));
         ModifyButton.setOnAction(e -> openSessionWindow("Modify Session"));
         ExitButton.setOnAction(e -> closeApplication());
+
+        RemoveButton.setOnAction(e -> removeSelectedSession());
 
         colNro.setCellValueFactory(p ->
                 new ReadOnlyObjectWrapper<>(MonthlyTable.getItems().indexOf(p.getValue()) + 1)
@@ -189,15 +192,40 @@ public class MainController implements Initializable {
         System.out.println("Successfully archived old dataset to: " + savePath);
     }
 
+    private void removeSelectedSession() {
+        Session selectedSession = MonthlyTable.getSelectionModel().getSelectedItem();
+
+        if (selectedSession == null) {
+            System.out.println("No session selected for removal.");
+            return;
+        }
+
+        monthlyDataset.getSessions().remove(selectedSession);
+
+        updateStatistics();
+
+        try {
+            jsonDataService.saveMonthlyDataset(monthlyDataset, SAVE_FILE_CURRENT);
+            System.out.println("Session successfully removed and saved to disk.");
+        } catch (IOException e) {
+            System.err.println("Failed to save dataset after removing session: " + e.getMessage());
+        }
+    }
+
+
     private void openSessionWindow(String windowTitle) {
+        LocalDate now = LocalDate.now();
+
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("session-edit.fxml"));
             Parent root = loader.load();
             SessionController controller = loader.getController();
 
-            if (!windowTitle.equals("Modify Session")) {
-                controller.setSession(new Session("1", "1"));
-            } else {
+            if (windowTitle.equals("Add Session")) {
+                String uuid = UUID.randomUUID().toString();
+
+                controller.setSession(new Session(uuid, Integer.toString(now.getDayOfMonth())));
+            } else if (windowTitle.equals("Modify Session")) {
                 Session selectedSession = MonthlyTable.getSelectionModel().getSelectedItem();
                 if (selectedSession != null) {
                     controller.setSession(selectedSession);
@@ -211,20 +239,22 @@ public class MainController implements Initializable {
             stage.showAndWait();
 
             if (controller.isConfirmedSave()) {
-                Session createdSession = controller.getSession();
+                Session handledSession = controller.getSession();
 
                 if (!windowTitle.equals("Modify Session")) {
-                    monthlyDataset.getSessions().add(createdSession);
+                    monthlyDataset.getSessions().add(handledSession);
                 } else {
-                    // Refresh table view in case an existing session was edited internally
                     MonthlyTable.refresh();
                 }
 
-                // Recalculate stats whenever data is modified or added
                 updateStatistics();
 
-                // Save changes to disk immediately
-                jsonDataService.saveMonthlyDataset(monthlyDataset, SAVE_FILE_CURRENT);
+                try {
+                    jsonDataService.saveMonthlyDataset(monthlyDataset, SAVE_FILE_CURRENT);
+                    System.out.println("Dataset successfully saved after modification.");
+                } catch (IOException e) {
+                    System.err.println("Failed to auto-save dataset: " + e.getMessage());
+                }
             }
 
         } catch (IOException e) {
