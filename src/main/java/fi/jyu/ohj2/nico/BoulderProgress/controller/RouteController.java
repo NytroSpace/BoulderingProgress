@@ -40,12 +40,6 @@ public class RouteController implements Initializable {
 
     private ObservableList<Route> routes;
 
-    // Session controller calls this before opening the window.
-    // Currently not needed. When a new route is added, the window closes. After that the session controller stops waiting and checks if we saved. If so, it uses a getter to get the new route.
-    //public void setRoutes(ObservableList<Route> routes) {
-    //    this.routes = routes;
-    //}
-
     private Route createdRoute;
     private boolean confirmedSave = false;
 
@@ -100,7 +94,6 @@ public class RouteController implements Initializable {
         }
 
         return false;
-
     }
 
 
@@ -115,27 +108,10 @@ public class RouteController implements Initializable {
         WallType wall = WallTypeBox.getValue();
         boolean completed = IsCompleted.isSelected();
 
-        //Route route = new Route(
-        //        grade,
-        //        attempts,
-        //        wall,
-        //        completed,
-        //        UUID.randomUUID()
-        //);
-
-        //routes.add(route);
-
         this.createdRoute = new Route(grade, attempts, wall, completed, UUID.randomUUID());
         confirmedSave = true;
 
-        onCancel();
-
-        /*
-        Mä oletan, että sun alkuperänen idea oli että sä voit lisätä monta peräkkäin ilman että se ikkuna sulkeutuu?
-        Mun mielestä, varsinkin koska meillä on vaan "Add" ja "Cancel" nappi, se käy enemmän järkeen vaan sulkea se ikkuna lisäyksen jälkeen.
-         */
-        //TextGrade.clear();
-        //TextAttempts.clear();
+        onClose();
     }
 
     /**
@@ -147,7 +123,7 @@ public class RouteController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         WallTypeBox.setItems(FXCollections.observableArrayList(WallType.values()));
-        Cancel.setOnAction(e -> onCancel());
+        Cancel.setOnAction(e -> onClose());
         AddRoute.setOnAction(e -> onAdd());
 
     }
@@ -156,7 +132,7 @@ public class RouteController implements Initializable {
      * If cancel is pressed, closes the route window.
      */
     @FXML
-    private void onCancel() {
+    private void onClose() {
         Cancel.getScene().getWindow().hide();
     }
 

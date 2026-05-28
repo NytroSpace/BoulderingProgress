@@ -1,5 +1,23 @@
 {
-  "sessions" : [ ],
+  "sessions" : [ {
+    "uuid" : "4f96d14a-0579-455a-93fc-b73045b12de6",
+    "date" : "28",
+    "routes" : [ {
+      "grade" : "5+",
+      "attempts" : 11,
+      "wall-type" : "Slab/Vertical",
+      "completed" : true,
+      "uuid" : "a63da32f-f1e2-4e70-94d1-4e2b33847345"
+    }, {
+      "grade" : "7A",
+      "attempts" : 11,
+      "wall-type" : "Slab/Vertical",
+      "completed" : true,
+      "uuid" : "10ee97be-ede1-41f1-a551-001555c290c9"
+    } ],
+    "attemptsCount" : 22,
+    "completedCount" : 2
+  } ],
   "year" : 2026,
   "month" : 5,
   "schema-version" : 1

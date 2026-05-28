@@ -227,9 +227,10 @@ public class MainController implements Initializable {
                 controller.setSession(new Session(uuid, Integer.toString(now.getDayOfMonth())));
             } else if (windowTitle.equals("Modify Session")) {
                 Session selectedSession = MonthlyTable.getSelectionModel().getSelectedItem();
-                if (selectedSession != null) {
-                    controller.setSession(selectedSession);
+                if (selectedSession == null) {
+                    return;
                 }
+                controller.setSession(selectedSession);
             }
 
             Stage stage = new Stage();
