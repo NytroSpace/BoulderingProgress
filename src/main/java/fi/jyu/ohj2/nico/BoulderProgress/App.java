@@ -7,6 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Handles everything that is needed for the first user view, AKA the main window
+ */
 public class App extends Application {
 
     @Override

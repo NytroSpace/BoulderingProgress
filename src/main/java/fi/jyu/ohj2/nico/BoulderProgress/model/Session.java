@@ -7,9 +7,14 @@ import javafx.collections.ObservableList;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * CLass for session which nests all the individual routes before adding the complete session as a whole to the main window.
+ */
 public class Session {
+    // unique user identifier
     private final String uuid;
     private final String date;
+    // List, which contains all added routes for that session
     private final ObservableList<Route> routes;
 
     @JsonCreator
@@ -24,6 +29,7 @@ public class Session {
         this.routes = FXCollections.observableArrayList(routesList != null ? routesList : new ArrayList<>());
     }
 
+    // Constructor
     public Session(String uuid, String date) {
         this(uuid, date, new ArrayList<>());
     }

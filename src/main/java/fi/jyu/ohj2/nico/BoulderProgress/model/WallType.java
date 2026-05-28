@@ -12,6 +12,7 @@ public enum WallType {
     // The label is required so the enum can be easily converted into a string and displayed in the TableColumn for WallType
     private final String label;
 
+    // Constructor
     WallType(String label) {this.label = label;}
 
     @Override

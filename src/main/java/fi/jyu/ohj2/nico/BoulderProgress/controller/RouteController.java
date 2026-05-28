@@ -38,8 +38,6 @@ public class RouteController implements Initializable {
     @FXML
     private TextField TextAttempts;
 
-    private ObservableList<Route> routes;
-
     private Route createdRoute;
     private boolean confirmedSave = false;
 
@@ -67,6 +65,12 @@ public class RouteController implements Initializable {
         return true;
     }
 
+    /**
+     * Checks the right formating for Bouldering grades.
+     * Accepts only 3, 3+, 4, 4+, 5, 5+, 6A, 6A+, 6B, 6B+, 6C, 6C+, 7A, ... , 9A and on also 9A+ to 9C+ even though they are currently only theoretical.
+     * @param grade the text that user inputs on the route windows grade field.
+     * @return grade either true as in correctly formated, or false not correctly formated.
+     */
     public boolean gradeCheck(String grade) {
 
         if (grade.isEmpty() || grade.length() > 3) return false;
@@ -77,23 +81,20 @@ public class RouteController implements Initializable {
 
         if (n <= '5') {
             if (grade.length() == 1) return true;
-            if (grade.length() == 2 && grade.charAt(1) == '+') return true;
-            return false;
+            return grade.length() == 2 && grade.charAt(1) == '+';
         }
 
-        if (n <= '9') {
-            if (grade.length() < 2) return false;
 
-            char l = grade.charAt(1);
-            l = Character.toLowerCase(l);
+        if (grade.length() < 2) return false;
 
-            if (l != 'a' && l != 'b' && l != 'c') return false;
+        char l = grade.charAt(1);
+        l = Character.toLowerCase(l);
 
-            if (grade.length() == 2) return true;
-            if (grade.charAt(2) == '+') return true;
-        }
+        if (l != 'a' && l != 'b' && l != 'c') return false;
 
-        return false;
+        if (grade.length() == 2) return true;
+
+        return grade.charAt(2) == '+';
     }
 
 
@@ -116,15 +117,18 @@ public class RouteController implements Initializable {
 
     /**
      *
-     * @param url
-     * @param resourceBundle
+     * @param url Default parameters for initialize, url is the for FXML filepath
+     * @param resourceBundle --//-- , recourceBundle for localization
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        // WallTypes come from enum, they are listed in the ComboBox
         WallTypeBox.setItems(FXCollections.observableArrayList(WallType.values()));
-        Cancel.setOnAction(e -> onClose());
-        AddRoute.setOnAction(e -> onAdd());
+        // Closes the window
+        Cancel.setOnAction(_ -> onClose());
+        // Adds the route to session list
+        AddRoute.setOnAction(_ -> onAdd());
 
     }
 
