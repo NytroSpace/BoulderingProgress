@@ -1,40 +1,16 @@
 {
   "sessions" : [ {
-    "uuid" : "4f96d14a-0579-455a-93fc-b73045b12de6",
-    "date" : "28",
+    "uuid" : "2328092b-d1ce-42b9-9672-f867ba1f7665",
+    "date" : "29",
     "routes" : [ {
-      "grade" : "5+",
+      "grade" : "6A",
       "attempts" : 11,
       "wall-type" : "Slab/Vertical",
       "completed" : true,
-      "uuid" : "a63da32f-f1e2-4e70-94d1-4e2b33847345"
-    }, {
-      "grade" : "7A",
-      "attempts" : 11,
-      "wall-type" : "Slab/Vertical",
-      "completed" : true,
-      "uuid" : "10ee97be-ede1-41f1-a551-001555c290c9"
-    } ],
-    "attemptsCount" : 22,
-    "completedCount" : 2
-  }, {
-    "uuid" : "a5ba22fe-a10b-42ef-89d7-4ae7619b64eb",
-    "date" : "28",
-    "routes" : [ {
-      "grade" : "6B+",
-      "attempts" : 10,
-      "wall-type" : "Slab/Vertical",
-      "completed" : true,
-      "uuid" : "7a7c5a80-e289-4604-9291-31410be3be99"
-    }, {
-      "grade" : "5",
-      "attempts" : 1,
-      "wall-type" : "Slab/Vertical",
-      "completed" : true,
-      "uuid" : "36e01a94-fb18-42d9-b0cd-31d945a2b75d"
+      "uuid" : "b98c1b95-de69-40dd-bda2-d0a6f222a5cb"
     } ],
     "attemptsCount" : 11,
-    "completedCount" : 2
+    "completedCount" : 1
   } ],
   "year" : 2026,
   "month" : 5,

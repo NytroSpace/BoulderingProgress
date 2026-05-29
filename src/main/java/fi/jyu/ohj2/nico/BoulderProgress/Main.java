@@ -2,7 +2,7 @@ package fi.jyu.ohj2.nico.BoulderProgress;
 
 import javafx.application.Application;
 
-/**
+/*
  * Launches the app!
  */
 public class Main {

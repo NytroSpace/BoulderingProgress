@@ -4,7 +4,6 @@ import fi.jyu.ohj2.nico.BoulderProgress.App;
 import fi.jyu.ohj2.nico.BoulderProgress.model.Route;
 import fi.jyu.ohj2.nico.BoulderProgress.model.Session;
 import fi.jyu.ohj2.nico.BoulderProgress.model.WallType;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,15 +14,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class SessionController implements Initializable {
@@ -77,6 +72,7 @@ public class SessionController implements Initializable {
         AddButton2.setOnAction(e -> openRouteWindow("Add Route"));
         CancelButton2.setOnAction(e -> onClose());
         SaveButton.setOnAction(e -> onSave());
+        RemoveButton.setOnAction(e -> removeSelectedRoute());
 
         // Used for updating the styles of the rows by adding a row controller
         routesTable.setRowFactory(tv -> new TableRow<Route>() {
@@ -93,6 +89,14 @@ public class SessionController implements Initializable {
                 }
             }
         });
+    }
+
+    private void removeSelectedRoute() {
+        Route selectedRoute = routesTable.getSelectionModel().getSelectedItem();
+
+        if (selectedRoute == null) return;
+
+        routes.remove(selectedRoute);
     }
 
 
@@ -133,36 +137,10 @@ public class SessionController implements Initializable {
     public void setSession(Session session) {
         this.session = session;
 
-        /*
-        Note: Because we're injecting the old routes (If we're modifying. Else it doesn't matter),
-        into the same list as the new ones, and we use this list to save the routes after closing the window,
-        it previously caused a duplication issue which I fixed with the damn purgeDuplicates method.
-        Thank you past me who thought this was a good idea, really cool.
-         */
         routes.setAll(session.getRoutes());
 
         routesTable.setItems(routes);
     }
-
-
-    /// <summary>
-    /// This method is used to purge the duplicate routes by comparing 2 separate route lists
-    /// </summary>
-    public void purgeDuplicates(List<Route> oldRoutes, List<Route> newRoutes) {
-        // Separate list to avoid an exception while looping
-        List<Route> toRemove = new ArrayList<>();
-
-        for (Route newRoute : newRoutes) {
-            // Checking if the UUID already exists in oldRoutes
-            boolean exists = oldRoutes.stream().anyMatch(r -> r.uuid().equals(newRoute.uuid()));
-            if (exists) {
-                toRemove.add(newRoute);
-            }
-        }
-
-        newRoutes.removeAll(toRemove);
-    }
-
 
     @FXML
     private void onClose() {
@@ -171,8 +149,9 @@ public class SessionController implements Initializable {
 
     @FXML
     private void onSave() {
-        purgeDuplicates(this.session.getRoutes(), routes); // Purge the duplicates before saving
-        this.session.getRoutes().addAll(routes);
+        this.session.getRoutes().clear(); // Clear all routes first, which avoids duplication and allows removal
+
+        this.session.getRoutes().addAll(routes); // Add all the routes back
 
         confirmedSave = true;
 

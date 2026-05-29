@@ -3,7 +3,6 @@ package fi.jyu.ohj2.nico.BoulderProgress.controller;
 import fi.jyu.ohj2.nico.BoulderProgress.model.Route;
 import fi.jyu.ohj2.nico.BoulderProgress.model.WallType;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

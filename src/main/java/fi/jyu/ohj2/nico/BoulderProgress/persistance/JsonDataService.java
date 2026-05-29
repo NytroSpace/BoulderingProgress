@@ -1,5 +1,6 @@
-package fi.jyu.ohj2.nico.BoulderProgress.model;
+package fi.jyu.ohj2.nico.BoulderProgress.persistance;
 
+import fi.jyu.ohj2.nico.BoulderProgress.model.MonthlyDataset;
 import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.file.Path;

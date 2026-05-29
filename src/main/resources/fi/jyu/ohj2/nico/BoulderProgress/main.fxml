@@ -104,6 +104,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                 </TableView>
+                <Button fx:id="ShowActiveButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Show Active" />
             </children>
         </VBox>
     </children>

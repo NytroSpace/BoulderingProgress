@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import java.util.List;
 import java.util.ArrayList;
 
-/**
+/*
  * CLass for session which nests all the individual routes before adding the complete session as a whole to the main window.
  */
 public class Session {
