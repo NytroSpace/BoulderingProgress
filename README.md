@@ -1,5 +1,4 @@
-Sovellus on tehty boulderointi kertojen tallentamiseen ja
-tarkasteluun. Se koostuu seuraavista pääosista.
+The application has been made for the recording of bouldering progress. 
 
 
 # Route (Record):
@@ -9,8 +8,7 @@ tarkasteluun. Se koostuu seuraavista pääosista.
 - isCompleted (boolean)
 - UUID (String)
 
-Route on Record tyyppinen ja see kasaa yhteen kaikki yksittäiseen
-reittiin kuuluvat tiedot.
+Route is of record type and groups together all of the relevant route information.
 
 ### WallType (Enum)
 - SLAB
@@ -18,27 +16,42 @@ reittiin kuuluvat tiedot.
 - OVERHANG
 - ROOF
 
-WallType on enum luokka joka määrittää mitä tyyppiä seinä voi olla.
+WallType is an enum class used inside a Route to determine the type of wall.
 
 ---
 
 
-# Session (Record)
+# Session (CLass)
 - listOfRoutes (Route)
 - date (String)
 - UUID (String)
 
-Session on myös Record tyyppinen ja se sisältää listan kaikista
-Routeista (reiteistä), jotka käyttäjä kiipesi annetulla kerralla.
+Session is a class that holds session specific information, as well as a list of all the routes done in that session.
 
 ---
 
-# Archive (Class)
-- listOfSessions (Session)
-- month (int)
-- year (int)
+# MonthlyDataset (Class)
+- listOfSession (Session)
+- month (Integer)
+- year (Integer)
 
-Archive on luokka joka tallentaa kuukauden ajan kaikki Session luokat
-omaan listaansa. Uuden kuukauden alussa tehdään uusi tyhjä Archive ja 
-vanha arkistoidaan historiaan näkyville, josta voi tarkistella omaa progressia.
+Same as the session class but one layer higher, so it holds month relevant data and a list of sessions in that month.
+
+--- 
+
+# MonthlySummary (Record)
+- month (String)
+- year (Integer)
+- path (String)
+
+MonthlySummary is used so that MainController doesn't get bloated with unnecessary data. Basically there is no reason
+for MainController to hold all the data for old months. So instead, we have a list of summaries which contain a path to 
+the file. If a user clicks on an old month, we use the path to pull the relevant data from that month.
+
+---
+
+# JsonDataService (Class)
+
+This class deals with saving data as a JSON file and pulling out data from the JSON file and then converting it into
+objects using the ObjectMapper
  
