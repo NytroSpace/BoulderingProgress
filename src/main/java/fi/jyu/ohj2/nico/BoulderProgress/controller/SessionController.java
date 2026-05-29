@@ -68,7 +68,6 @@ public class SessionController implements Initializable {
         );
         // endregion
 
-        // TODO: Add a remove function
         AddButton2.setOnAction(e -> openRouteWindow("Add Route"));
         CancelButton2.setOnAction(e -> onClose());
         SaveButton.setOnAction(e -> onSave());

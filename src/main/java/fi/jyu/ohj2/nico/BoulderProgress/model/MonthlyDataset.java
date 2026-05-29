@@ -12,7 +12,7 @@ import java.util.List;
 public class MonthlyDataset {
     // We hide this from Jackson because Jackson doesn't know what an ObservableList is because it's fucking stupid
     @JsonIgnore
-    private ObservableList<Session> sessions;
+    private final ObservableList<Session> sessions;
 
     private final int year;
     private final int month;

@@ -8,7 +8,7 @@ The application has been made for the recording of bouldering progress.
 - isCompleted (boolean)
 - UUID (String)
 
-Route is of record type and groups together all of the relevant route information.
+Route is of record type and groups together all the relevant route information.
 
 ### WallType (Enum)
 - SLAB

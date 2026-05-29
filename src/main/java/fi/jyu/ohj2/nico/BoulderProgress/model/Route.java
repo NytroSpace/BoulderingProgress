@@ -9,8 +9,7 @@ public record Route(
         @JsonProperty("grade") String grade,
         @JsonProperty("attempts") int attempts,
         @JsonProperty("wall-type") WallType wallType,
-        @JsonProperty("completed") boolean completed,
-        @JsonProperty("uuid") java.util.UUID uuid
+        @JsonProperty("completed") boolean completed
 ) {
 
     @Override

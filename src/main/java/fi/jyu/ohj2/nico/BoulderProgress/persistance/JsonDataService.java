@@ -16,7 +16,7 @@ public class JsonDataService {
         mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), log); // This will save the JSON file with formatting so it's nicer to look at during debugging
     }
 
-    public MonthlyDataset loadMonthlyDataset(Path path) throws IOException {
+    public MonthlyDataset loadMonthlyDataset(Path path) {
         return mapper.readValue(path.toFile(), MonthlyDataset.class); // Load the JSON data into objects
     }
 }

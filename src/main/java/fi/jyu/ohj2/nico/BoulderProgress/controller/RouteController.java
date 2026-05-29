@@ -83,7 +83,6 @@ public class RouteController implements Initializable {
             return grade.length() == 2 && grade.charAt(1) == '+';
         }
 
-
         if (grade.length() < 2) return false;
 
         char l = grade.charAt(1);
@@ -108,7 +107,7 @@ public class RouteController implements Initializable {
         WallType wall = WallTypeBox.getValue();
         boolean completed = IsCompleted.isSelected();
 
-        this.createdRoute = new Route(grade, attempts, wall, completed, UUID.randomUUID());
+        this.createdRoute = new Route(grade, attempts, wall, completed);
         confirmedSave = true;
 
         onClose();
